@@ -3,11 +3,8 @@ import '../json_mapper.dart';
 class StoryModel {
   StoryModel({required this.title});
   final String title;
+  static const JsonResponseMapper<StoryModel> mapper = _mapper;
 }
 
-class StoryModelMapper implements JsonMapper<StoryModel> {
-  @override
-  StoryModel fromJson(Map<String, dynamic> json) {
-    return StoryModel(title: json['title']);
-  }
-}
+StoryModel _mapper(Map<String, dynamic> json) =>
+    StoryModel(title: json['title']);

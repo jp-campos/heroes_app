@@ -1,3 +1,1 @@
-abstract class JsonMapper<T> {
-  T fromJson(Map<String, dynamic> json);
-}
+typedef JsonResponseMapper<T> = T Function(Map<String, dynamic>);

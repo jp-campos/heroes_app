@@ -3,11 +3,8 @@ import '../json_mapper.dart';
 class EventModel {
   EventModel({required this.title});
   final String title;
+  static const JsonResponseMapper<EventModel> mapper = _mapper;
 }
 
-class EventModelMapper implements JsonMapper<EventModel> {
-  @override
-  EventModel fromJson(Map<String, dynamic> json) {
-    return EventModel(title: json['title']);
-  }
-}
+EventModel _mapper(Map<String, dynamic> json) =>
+    EventModel(title: json['title']);

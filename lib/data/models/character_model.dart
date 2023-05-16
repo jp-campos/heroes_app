@@ -12,17 +12,15 @@ class CharacterModel {
   final String name;
   final String? thumbnail;
   final String description;
+  static const JsonResponseMapper<CharacterModel> mapper = _mapper;
 }
 
-class CharacterModelMapper implements JsonMapper<CharacterModel> {
-  @override
-  CharacterModel fromJson(Map<String, dynamic> json) {
-    final thumbnailJson = json['thumbnail'];
-    return CharacterModel(
-      id: json['id'],
-      name: json['name'],
-      thumbnail: mapImage(thumbnailJson),
-      description: json['description'],
-    );
-  }
+CharacterModel _mapper(Map<String, dynamic> json) {
+  final thumbnailJson = json['thumbnail'];
+  return CharacterModel(
+    id: json['id'],
+    name: json['name'],
+    thumbnail: mapImage(thumbnailJson),
+    description: json['description'],
+  );
 }

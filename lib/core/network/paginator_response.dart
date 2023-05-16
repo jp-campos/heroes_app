@@ -1,4 +1,4 @@
-import '../json_mapper.dart';
+import '../../data/json_mapper.dart';
 
 class PaginatorResponse<T> {
   PaginatorResponse({
@@ -18,9 +18,9 @@ class PaginatorResponse<T> {
   List<T> results;
 
   static PaginatorResponse<T> fromJson<T>(
-    Map<String, dynamic> json, {
-    required JsonResponseMapper<T> contentMapper,
-  }) {
+    Map<String, dynamic> json,
+    JsonResponseMapper<T> resultMapper,
+  ) {
     final data = json['data'];
     return PaginatorResponse(
       offset: data['offset'],
@@ -29,7 +29,7 @@ class PaginatorResponse<T> {
       count: data['count'],
       results: data['results']
           .map<T>(
-            (resultJson) => contentMapper.call(resultJson),
+            (resultJson) => resultMapper.call(resultJson),
           )
           .toList(),
     );
