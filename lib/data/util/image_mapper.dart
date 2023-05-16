@@ -1,3 +1,5 @@
 String? mapImage(Map<String, dynamic>? json) {
-  return json != null ? '${json['path']}.${json['extension']}' : null;
+  String? path = json?['path'];
+  path = path?.replaceFirst('http', 'https');
+  return json != null ? '$path.${json['extension']}' : null;
 }

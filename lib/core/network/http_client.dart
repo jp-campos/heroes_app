@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import '../../data/json_mapper.dart';
 import '../encryption_utils.dart';
 import 'api_response.dart';
+import 'json_request.dart';
+
+enum RestMethod { get, post, put, delete }
 
 class ComicHttpClient {
   ComicHttpClient({
@@ -47,6 +50,7 @@ class ComicHttpClient {
   Future<ApiResponse<T>> post<T>(
     String path, {
     required JsonResponseMapper<T> responseMapper,
+    required JsonRequest request,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
   }) async {
@@ -58,7 +62,60 @@ class ComicHttpClient {
     if (headers != null) postHeaders.addAll(headers);
 
     try {
-      final response = await _client.post(uri, headers: headers);
+      final response = await _client.post(
+        uri,
+        headers: headers,
+        body: json.encode(request.toJson()),
+      );
+      return _mapResponse<T>(response, responseMapper);
+    } catch (exception) {
+      //TODO: log Exception
+      return ApiResponse<T>.error(exception.toString());
+    }
+  }
+
+  Future<ApiResponse<T>> put<T>(
+    String path, {
+    required JsonResponseMapper<T> responseMapper,
+    required JsonRequest request,
+    Map<String, String>? queryParams,
+    Map<String, String>? headers,
+  }) async {
+    final Map<String, String> requestQueryParams =
+        _buildQueryParams(queryParams);
+    final uri = Uri.https(_basePath, path, requestQueryParams);
+
+    final putHeaders = {'Content-type': 'application/json'};
+    if (headers != null) putHeaders.addAll(headers);
+
+    try {
+      final response = await _client.post(
+        uri,
+        headers: headers,
+        body: json.encode(request.toJson()),
+      );
+      return _mapResponse<T>(response, responseMapper);
+    } catch (exception) {
+      //TODO: log Exception
+      return ApiResponse<T>.error(exception.toString());
+    }
+  }
+
+  Future<ApiResponse<T>> delete<T>(
+    String path, {
+    required JsonResponseMapper<T> responseMapper,
+    Map<String, String>? queryParams,
+    Map<String, String>? headers,
+  }) async {
+    final Map<String, String> requestQueryParams =
+        _buildQueryParams(queryParams);
+    final uri = Uri.https(_basePath, path, requestQueryParams);
+
+    final postHeaders = {'Content-type': 'application/json'};
+    if (headers != null) postHeaders.addAll(headers);
+
+    try {
+      final response = await _client.delete(uri, headers: headers);
       return _mapResponse<T>(response, responseMapper);
     } catch (exception) {
       //TODO: log Exception
